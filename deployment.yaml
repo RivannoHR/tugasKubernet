@@ -8,7 +8,7 @@ metadata:
     app: sample-app
 spec:
   # comment if using HPA
-  replicas: 3 # number of pods to run
+  replicas: 4 # number of pods to run
 
   # !IMPORTANT! labels selector for Service
   selector:
@@ -129,16 +129,16 @@ spec:
           # - Guaranteed: highest priority, guaranteed not to be killed. Set equal amount of resource requests and limits
           # - Burstable: killed when resource is on upper limit. Set different resource requests and limits
           # - BestEffort: lowest priority, killed first. do not have any resource requests or limits.
-          # resources:
-          #   requests:
-          #     memory: 100Mi
-          #     cpu: 100m
-          #     # ephemeral-storage: 2Gi # request for pod's storage
-          #     # hugepages-2Mi: 100Mi # hugepage enable k8s to manage memory in large chuks
+          resources:
+            requests:
+               memory: 50M
+               cpu: 50M
+               # ephemeral-storage: 2Gi # request for pod's storage
+               # hugepages-2Mi: 100Mi # hugepage enable k8s to manage memory in large chuks
 
-          #   limits:
-          #     memory: 110Mi
-          #     cpu: 110m  
+            limits:
+               memory: 50M
+               cpu: 50m  
           
           # health-check
 
@@ -147,8 +147,8 @@ spec:
           # { "success": "ok"}
           readinessProbe:
             httpGet:
-              path: /health
-              port: 8080
+              path: /skibidi
+              port: 8082
             successThreshold: 1
             failureThreshold: 3
             initialDelaySeconds: 5
@@ -157,14 +157,13 @@ spec:
           # check if container is alive
           livenessProbe:
             httpGet:
-              path: /liveness
-              port: 8080
+              path: /sigma
+              port: 8081
             successThreshold: 1
             failureThreshold: 3
             initialDelaySeconds: 10
             periodSeconds: 30
-            timeoutSeconds: 1
-          
+            timeoutSeconds: 1    
           # Check container is already started. Ideal to start app with long startup time. 
           # executed before readinessProbe
           # startupProbe:
